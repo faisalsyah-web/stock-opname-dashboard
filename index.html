@@ -215,25 +215,22 @@
         document.getElementById("valPlus").innerText = toRupiah(totalPlus);
 
         // Row2: Chart per category grouping by kategori itself
-        const cats =
-          selCat === "All"
-            ? Array.from(new Set(fullData.map((d) => d["Kategori"])))
-            : [selCat];
-        const syst = cats.map((c) =>
-          fullData
-            .filter((d) => d["Kategori"] === c)
+        const items = Array.from(new Set(data.map((d) => d["Jenis Item"])));
+        const syst = items.map((i) =>
+          data
+            .filter((d) => d["Jenis Item"] === i)
             .reduce((s, v) => s + parseNumber(v["Teori"]), 0)
         );
-        const phys = cats.map((c) =>
-          fullData
-            .filter((d) => d["Kategori"] === c)
+        const phys = items.map((i) =>
+          data
+            .filter((d) => d["Jenis Item"] === i)
             .reduce((s, v) => s + parseNumber(v["QUANTITY"]), 0)
         );
         Plotly.newPlot(
           "chartComp",
           [
             {
-              x: cats,
+              x: items,
               y: syst,
               name: "Sistem",
               type: "bar",
@@ -242,7 +239,7 @@
               textposition: "inside",
             },
             {
-              x: cats,
+              x: items,
               y: phys,
               name: "Fisik",
               type: "bar",
@@ -253,7 +250,7 @@
           ],
           {
             title: {
-              text: "Sistem vs Fisik (per Kategori)",
+              text: "Sistem vs Fisik (per Jenis Item)",
               font: { size: 16 },
             },
             barmode: "group",
@@ -261,22 +258,22 @@
           }
         );
 
-        // Row2: Selisih per category
-        const minus = cats.map((c) =>
-          fullData
-            .filter((d) => d["Kategori"] === c)
+        // Row2: Selisih Minus & Plus per Jenis Item
+        const minus = items.map((i) =>
+          data
+            .filter((d) => d["Jenis Item"] === i)
             .reduce((s, v) => s + parseNumber(v["TOTAL SELISIH Minus"]), 0)
         );
-        const plus = cats.map((c) =>
-          fullData
-            .filter((d) => d["Kategori"] === c)
+        const plus = items.map((i) =>
+          data
+            .filter((d) => d["Jenis Item"] === i)
             .reduce((s, v) => s + parseNumber(v["TOTAL SELISIH Plus"]), 0)
         );
         Plotly.newPlot(
           "chartSelType",
           [
             {
-              x: cats,
+              x: items,
               y: minus,
               name: "Minus",
               type: "bar",
@@ -285,7 +282,7 @@
               textposition: "inside",
             },
             {
-              x: cats,
+              x: items,
               y: plus,
               name: "Plus",
               type: "bar",
@@ -296,7 +293,7 @@
           ],
           {
             title: {
-              text: "Selisih Minus & Plus (per Kategori)",
+              text: "Selisih Minus & Plus (per Jenis Item)",
               font: { size: 16 },
             },
             barmode: "group",
